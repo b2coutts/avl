@@ -58,7 +58,6 @@ struct node *rrot(struct node *n){
     return oldleft;
 }
 
-/*
 // rebalance a node (assumed node is unbalanced by at most 1; heights differ <2)
 struct node *rebalance(struct node *n){
     if(!n) return n;
@@ -67,9 +66,23 @@ struct node *rebalance(struct node *n){
     int rh = n->r ? n->r->h : -1;
 
     if(lh == rh + 2){
-        if(
+        if(n->l->l && n->l->l->h == rh+1){ // right rotation
+            n = rrot(n);
+        }else if(n->l->r && n->l->r->h == rh+1){ // left-right rotation
+            n->l = lrot(n->l);
+            n = rrot(n);
+        }
+    }else if(rh == lh + 2){
+        if(n->r->r && n->r->r->h == lh+1){ // left rotation
+            n = lrot(n);
+        }else if(n->r->l && n->r->l->h == lh+1){ // right-left rotation
+            n->r = rrot(n->r);
+            n = lrot(n);
+        }
+    }
+
+    return n;
 }
-*/
 
 // insert a kv pair into a node
 struct node *node_insert(struct node *n, char *key, void *data){
@@ -80,16 +93,7 @@ struct node *node_insert(struct node *n, char *key, void *data){
         if(n->r){
             node_insert(n->r, key, data);
             update_height(n);
-            int lheight = (n->l ? n->l->h : -1);
-
-            if(n->r->h == lheight + 2){
-                if(n->r->r->h == lheight + 1){ // left rotation
-                    n = lrot(n);
-                }else if(n->r->l->h == lheight + 1){ // left-right rotation
-                    n->r = rrot(n->r);
-                    n = lrot(n);
-                }
-            }
+            n = rebalance(n);
         }else{
             n->r = node_create(key, data);
             update_height(n);
@@ -98,16 +102,7 @@ struct node *node_insert(struct node *n, char *key, void *data){
         if(n->l){
             node_insert(n->l, key, data);
             update_height(n);
-            int rheight = (n->r ? n->r->h : -1);
-
-            if(n->l->h == rheight + 2){
-                if(n->l->l->h == rheight + 1){ // right rotation
-                    n = rrot(n);
-                }else if(n->l->r->h == rheight + 1){ // right-left rotation
-                    n->l = lrot(n->l);
-                    n = rrot(n);
-                }
-            }
+            n = rebalance(n);
         }else{
             n->l = node_create(key, data);
             update_height(n);
@@ -185,22 +180,23 @@ int main(){
     AVLTree *t = avl_create();
     printf("one\n");
 
-    avl_insert(t, "asdf", 100);
+    avl_insert(t, "asdf", (void*)100);
     printf("two\n");
-    avl_insert(t, "fdsa", 200);
+    avl_insert(t, "fdsa", (void*)200);
 
     node_print(t->root, 0);
 
     printf("three\n");
 
-    avl_insert(t, "zdfs", 300);
+    avl_insert(t, "zdfs", (void*)300);
 
-    node_print(t->root, 0);
+    printf("in main:\n");
+    node_print(t->root, 1);
 
     printf("four\n");
-    avl_insert(t, "aasdf", 400);
+    avl_insert(t, "aasdf", (void*)400);
     printf("five\n");
-    avl_insert(t, "dicks", 500);
+    avl_insert(t, "dicks", (void*)500);
     printf("six\n");
 
     //printf("root is %s\n", t->root->k);
