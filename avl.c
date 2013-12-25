@@ -4,7 +4,14 @@
 
 #include <stdio.h>
 
-/************** helper functions ***************/
+/************** helper functions/definitions ***************/
+
+// TODO: better way of doing this?
+typedef struct munge {
+    struct node *n;
+    char *k;
+    void *d;
+} munge;
 
 // return the max of two integers
 int max(int a, int b){
@@ -120,6 +127,24 @@ void *node_lookup(struct node *n, char *key){
     return node_lookup(n->l, key);
 }
 
+// remove the rightmost node of a nonempty tree while maintaining balance;
+// return the new tree, and the key/data pair of the removed node
+struct munge get_rightmost(struct node *n){
+    if(n->r){
+        struct munge m = get_rightmost(n->r);
+        n->r = m.n;
+        m.n = rebalance(n);
+        return m;
+    }else{
+        struct munge m;
+        m.n = n->l;
+        m.k = n->k;
+        m.d = n->d;
+        free(n);
+        return m;
+    }
+}
+
 // delete a value in a node
 void node_delete(struct node *n, char *key){
     if(!n) return;
@@ -199,7 +224,10 @@ int main(){
     avl_insert(t, "dicks", (void*)500);
     printf("six\n");
 
-    //printf("root is %s\n", t->root->k);
+    printf("final:\n");
+    node_print(t->root, 1);
 
-    node_print(t->root, 0);
+    struct munge m = get_rightmost(t->root);
+    printf("rightmost: (%s,%i)\n", m.k, m.d);
+    node_print(m.n, 1);
 }
