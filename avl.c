@@ -146,14 +146,31 @@ struct munge get_rightmost(struct node *n){
 }
 
 // delete a value in a node
-void node_delete(struct node *n, char *key){
-    if(!n) return;
+struct node *node_delete(struct node *n, char *key){
+    if(!n) return 0;
     int cmp = strcmp(n->k, key);
-    if(cmp == 0){
-        
+    if(cmp == 0){ // delete the root node
+        if(!n->l){
+            struct node *r = n->r;
+            free(n);
+            return r;
+        }else if(!n->r){
+            struct node *l = n->l;
+            free(n);
+            return l;
+        }else{
+            struct munge m = get_rightmost(n->l);
+            n->l = m.n;
+            n->k = m.k;
+            n->d = m.d;
+            update_height(n);
+            return rebalance(n);
+        }
     }
-    if(cmp < 0) node_delete(n->r, key);
-    if(cmp > 0) node_delete(n->l, key);
+    if(cmp < 0) n->r = node_delete(n->r, key);
+    if(cmp > 0) n->l = node_delete(n->l, key);
+    update_height(n);
+    return rebalance(n);
 }
 
 /************** implementation functions ***************/
@@ -177,6 +194,11 @@ int32_t avl_insert(struct AVLTree *avl, char *key, void* data){
     }else{
         avl->root = node_create(key, data);
     }
+    return 0;
+}
+
+int32_t avl_delete(struct AVLTree *avl, char *key){
+    avl->root = node_delete(avl->root, key);
     return 0;
 }
 
@@ -227,7 +249,11 @@ int main(){
     printf("final:\n");
     node_print(t->root, 1);
 
-    struct munge m = get_rightmost(t->root);
-    printf("rightmost: (%s,%i)\n", m.k, m.d);
-    node_print(m.n, 1);
+    //struct munge m = get_rightmost(t->root);
+    //printf("rightmost: (%s,%i)\n", m.k, m.d);
+    //node_print(m.n, 1);
+
+    avl_delete(t, "dicks");
+    printf("deletion:\n");
+    node_print(t->root, 1);
 }
