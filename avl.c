@@ -27,9 +27,10 @@ void update_height(struct node *n){
 }
 
 // deallocate a node
-void node_destroy(struct node *n){
-    if(n->l) node_destroy(n->l);
-    if(n->r) node_destroy(n->r);
+void node_destroy(struct node *n, int recurse){
+    free(n->k);
+    if(recurse && n->l) node_destroy(n->l, 1);
+    if(recurse && n->r) node_destroy(n->r, 1);
     free(n);
 }
 
@@ -38,7 +39,7 @@ struct node *node_create(char *key, void *data){
     struct node *n = malloc(sizeof(struct node));
     n->l = 0;
     n->r = 0;
-    n->k = key;
+    n->k = (char*)strdup(key);
     n->d = data;
     n->h = 0;
 }
@@ -152,14 +153,15 @@ struct node *node_delete(struct node *n, char *key){
     if(cmp == 0){ // delete the root node
         if(!n->l){
             struct node *r = n->r;
-            free(n);
+            node_destroy(n, 0);
             return r;
         }else if(!n->r){
             struct node *l = n->l;
-            free(n);
+            node_destroy(n, 0);
             return l;
         }else{
             struct munge m = get_rightmost(n->l);
+            free(n->k);
             n->l = m.n;
             n->k = m.k;
             n->d = m.d;
@@ -183,7 +185,7 @@ struct AVLTree* avl_create(){
 }
 
 void avl_destroy(AVLTree *tree){
-    node_destroy(tree->root);
+    node_destroy(tree->root, 1);
     free(tree);
 }
     
