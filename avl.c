@@ -39,7 +39,7 @@ struct node *node_create(char *key, void *data){
     struct node *n = malloc(sizeof(struct node));
     n->l = 0;
     n->r = 0;
-    n->k = (char*)strdup(key);
+    n->k = strdup(key);
     n->d = data;
     n->h = 0;
 }
