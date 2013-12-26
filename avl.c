@@ -2,26 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX(x,y) ( (x<y) ? y : x)
+#define HL(x) ( (x->l ? x->l->h : -1) )
+#define HR(x) ( (x->r ? x->r->h : -1) )
+
 /************** helper functions/definitions ***************/
 
-// TODO: better way of doing this?
 typedef struct munge {
     struct node *n;
     char *k;
     void *d;
 } munge;
 
-// return the max of two integers
-int max(int a, int b){
-    return a>b ? a : b;
-}
-
 // update the height of a node
 void update_height(struct node *n){
-    int rec = 0;
-    if(n->l) rec = max(rec, n->l->h + 1);
-    if(n->r) rec = max(rec, n->r->h + 1);
-    n->h = rec;
+    n->h = MAX(HL(n), HR(n))+1;
 }
 
 // deallocate a node
@@ -95,7 +90,6 @@ struct node *rebalance(struct node *n){
 // insert a kv pair into a node
 struct node *node_insert(struct node *n, char *key, void *data){
     int cmp = strcmp(n->k, key);
-    if(cmp == 0) return n;
     if(cmp < 0){
         if(n->r){
             n->r = node_insert(n->r, key, data);
@@ -114,7 +108,7 @@ struct node *node_insert(struct node *n, char *key, void *data){
             n->l = node_create(key, data);
             update_height(n);
         }
-    }
+    }else if(cmp == 0) return n;
     return n;
 }
 
