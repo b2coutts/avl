@@ -134,6 +134,7 @@ struct munge get_rightmost(struct node *n){
     if(n->r){
         struct munge m = get_rightmost(n->r);
         n->r = m.n;
+        update_height(n);
         m.n = rebalance(n);
         return m;
     }else{
