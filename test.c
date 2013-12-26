@@ -52,6 +52,8 @@ int calcheight(struct node *n){
     return MAX(calcheight(n->l), calcheight(n->r)) + 1;
 }
 
+char *strdup(const char *); // why??
+
 int main(){
     srand(0xDEADBEEF);
     char *s = strdup("CHARACTERS");
