@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <stdio.h>
-
 /************** helper functions/definitions ***************/
 
 // TODO: better way of doing this?
@@ -210,56 +208,3 @@ int32_t avl_delete(struct AVLTree *avl, char *key){
 void *avl_lookup(AVLTree *tree, char *key){
     return node_lookup(tree->root, key);
 }
-
-/************** testing code *******************/
-// print an AVL node visually
-void node_print(struct node *n, int ind){
-    for(int i = 0; i < ind; i++){
-        printf("  ");
-    }
-
-    if(n){
-        printf("%s(%i)[%i]\n", n->k, n->h, n->d);
-        node_print(n->l, ind+1);
-        node_print(n->r, ind+1);
-    }else{
-        printf("~\n");
-    }
-}
-
-/*
-int main(){
-    AVLTree *t = avl_create();
-    printf("one\n");
-
-    avl_insert(t, "asdf", (void*)100);
-    printf("two\n");
-    avl_insert(t, "fdsa", (void*)200);
-
-    node_print(t->root, 0);
-
-    printf("three\n");
-
-    avl_insert(t, "zdfs", (void*)300);
-
-    printf("in main:\n");
-    node_print(t->root, 1);
-
-    printf("four\n");
-    avl_insert(t, "aasdf", (void*)400);
-    printf("five\n");
-    avl_insert(t, "dicks", (void*)500);
-    printf("six\n");
-
-    printf("final:\n");
-    node_print(t->root, 1);
-
-    //struct munge m = get_rightmost(t->root);
-    //printf("rightmost: (%s,%i)\n", m.k, m.d);
-    //node_print(m.n, 1);
-
-    avl_delete(t, "dicks");
-    printf("deletion:\n");
-    node_print(t->root, 1);
-}
-*/

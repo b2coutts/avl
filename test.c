@@ -48,6 +48,21 @@ char *strdup(const char *s){
     return ret;
 }
 
+// print an AVL node visually
+void node_print(struct node *n, int ind){
+    for(int i = 0; i < ind; i++){
+        printf("  ");
+    }
+
+    if(n){
+        printf("%s(%i)[%i]\n", n->k, n->h, n->d);
+        node_print(n->l, ind+1);
+        node_print(n->r, ind+1);
+    }else{
+        printf("~\n");
+    }
+}
+
 int main(){
     srand(0xDEADBEEF);
     char *s = strdup("CHARACTERS");
@@ -98,4 +113,6 @@ int main(){
         if(avl_lookup(t, keys[i]) == (void*)i) correct++;
     }
     printf("Score: %i/%i\n", correct, ind);
+
+    node_print(t->root, 0);
 }
