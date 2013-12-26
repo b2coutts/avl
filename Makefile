@@ -1,6 +1,5 @@
 CC      = gcc
-CFLAGS  = -pg -Ofast -fexpensive-optimizations -ffast-math -fno-exceptions \
-          -std=c99
+CFLAGS  = -Ofast -fexpensive-optimizations -ffast-math -fno-exceptions -std=c99
 
 avl_demo: test.c obj/avl.o
 	$(CC) $(CFLAGS) -Wno-int-to-pointer-cast test.c avl.c -o avl_demo
