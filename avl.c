@@ -99,7 +99,7 @@ struct node *node_insert(struct node *n, char *key, void *data){
     if(cmp == 0) return n;
     if(cmp < 0){
         if(n->r){
-            node_insert(n->r, key, data);
+            n->r = node_insert(n->r, key, data);
             update_height(n);
             n = rebalance(n);
         }else{
@@ -108,7 +108,7 @@ struct node *node_insert(struct node *n, char *key, void *data){
         }
     }else if(cmp > 0){
         if(n->l){
-            node_insert(n->l, key, data);
+            n->l = node_insert(n->l, key, data);
             update_height(n);
             n = rebalance(n);
         }else{
@@ -209,7 +209,6 @@ void *avl_lookup(AVLTree *tree, char *key){
 }
 
 /************** testing code *******************/
-
 // print an AVL node visually
 void node_print(struct node *n, int ind){
     for(int i = 0; i < ind; i++){
@@ -225,6 +224,7 @@ void node_print(struct node *n, int ind){
     }
 }
 
+/*
 int main(){
     AVLTree *t = avl_create();
     printf("one\n");
@@ -259,3 +259,4 @@ int main(){
     printf("deletion:\n");
     node_print(t->root, 1);
 }
+*/
