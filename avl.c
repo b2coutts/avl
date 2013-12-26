@@ -94,7 +94,6 @@ struct node *rebalance(struct node *n){
 
 // insert a kv pair into a node
 struct node *node_insert(struct node *n, char *key, void *data){
-    int height = n->h;
     int cmp = strcmp(n->k, key);
     if(cmp == 0) return n;
     if(cmp < 0){
