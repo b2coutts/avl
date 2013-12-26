@@ -42,6 +42,7 @@ struct node *node_create(char *key, void *data){
     n->k = strdup(key);
     n->d = data;
     n->h = 0;
+    return n;
 }
 
 // left rotation
