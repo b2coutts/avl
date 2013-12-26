@@ -42,17 +42,11 @@ void adv_key(char *str){
     }
 }
 
-int nnodes(struct node *n){
-    if(!n) return 0;
-    return nnodes(n->l) + nnodes(n->r) + 1;
+char *strdup(const char *s){
+    char *ret = malloc(strlen(s)+1);
+    strcpy(ret, s);
+    return ret;
 }
-
-int calcheight(struct node *n){
-    if(!n) return -1;
-    return MAX(calcheight(n->l), calcheight(n->r)) + 1;
-}
-
-char *strdup(const char *); // why??
 
 int main(){
     srand(0xDEADBEEF);
