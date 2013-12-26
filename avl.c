@@ -181,30 +181,27 @@ struct node *node_delete(struct node *n, char *key){
 struct AVLTree* avl_create(){
     struct AVLTree *t = malloc(sizeof(struct AVLTree));
     t->root = 0;
-    t->nodes = 0;
     return t;
 }
 
-void avl_destroy(AVLTree *tree){
+void avl_destroy(struct AVLTree *tree){
     node_destroy(tree->root, 1);
     free(tree);
 }
     
 
-int32_t avl_insert(struct AVLTree *avl, char *key, void* data){
+void avl_insert(struct AVLTree *avl, char *key, void* data){
     if(avl->root){
         avl->root = node_insert(avl->root, key, data);
     }else{
         avl->root = node_create(key, data);
     }
-    return 0;
 }
 
-int32_t avl_delete(struct AVLTree *avl, char *key){
+void avl_delete(struct AVLTree *avl, char *key){
     avl->root = node_delete(avl->root, key);
-    return 0;
 }
 
-void *avl_lookup(AVLTree *tree, char *key){
+void *avl_lookup(struct AVLTree *tree, char *key){
     return node_lookup(tree->root, key);
 }
