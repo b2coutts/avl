@@ -10,8 +10,7 @@
 #define HR(x) ( (x->r ? x->r->h : -1) )
 
 #define KEYSIZE 10
-#define TEST_SIZE 100000
-
+#define TEST_SIZE 1000000
 
 int proper_heights(struct node *n){
     if(!n) return 1;
@@ -68,15 +67,12 @@ int main(){
     }
     printf("done.\n");
 
-    //node_print(t->root, 0);
-
     // perform TEST_SIZE delete/insert operations
     printf("Performing %i deletions/inserts...", TEST_SIZE); fflush(stdout);
     unsigned int ind = TEST_SIZE;
     for(unsigned int i = 0; i < TEST_SIZE; i++){
         int node = ind++;
         if(rand()%2){ // delete a node with 50% probability
-            //printf("deleting something\n");
             node = rand()%(--ind);
             avl_delete(t, keys[node]);
             free(keys[node]);
@@ -84,30 +80,26 @@ int main(){
         adv_key(s);
         keys[node] = strdup(s);
         avl_insert(t, s, (void*)node);
-    //printf("inserting %s[%i]\n", s, node);
-    //node_print(t->root, 0);
     }
     printf("done.\n");
 
     // verify resulting tree
-    printf("Testing height label correctness...");
+    printf("Testing height label correctness..."); fflush(stdout);
     int hcheck = proper_heights(t->root);
     printf("%s\n", hcheck ? "PASS" : "FAIL");
 
-    printf("Testing AVL balance correctness...");
+    printf("Testing AVL balance correctness..."); fflush(stdout);
     int acheck = is_avl(t->root);
     printf("%s\n", acheck ? "PASS" : "FAIL");
 
-    printf("Testing BST correctness...");
+    printf("Testing BST correctness..."); fflush(stdout);
     int bcheck = is_bst(t->root);
     printf("%s\n", bcheck ? "PASS" : "FAIL");
 
-    printf("Testing value correctness...");
+    printf("Testing value correctness..."); fflush(stdout);
     unsigned int correct = 0;
     for(int i = 0; i < ind; i++){
         if(avl_lookup(t, keys[i]) == (void*)i) correct++;
     }
     printf("Score: %i/%i\n", correct, ind);
-
-    //node_print(t->root, 0);
 }
