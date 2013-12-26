@@ -113,6 +113,4 @@ int main(){
         if(avl_lookup(t, keys[i]) == (void*)i) correct++;
     }
     printf("Score: %i/%i\n", correct, ind);
-
-    node_print(t->root, 0);
 }
