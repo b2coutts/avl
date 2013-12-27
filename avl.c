@@ -90,25 +90,12 @@ struct node *rebalance(struct node *n){
 // insert a kv pair into a node
 struct node *node_insert(struct node *n, char *key, void *data){
     int cmp = strcmp(n->k, key);
-    if(cmp < 0){
-        if(n->r){
-            n->r = node_insert(n->r, key, data);
-            update_height(n);
-            n = rebalance(n);
-        }else{
-            n->r = node_create(key, data);
-            update_height(n);
-        }
-    }else if(cmp > 0){
-        if(n->l){
-            n->l = node_insert(n->l, key, data);
-            update_height(n);
-            n = rebalance(n);
-        }else{
-            n->l = node_create(key, data);
-            update_height(n);
-        }
-    }else if(cmp == 0) return n;
+    if(cmp < 0)
+        n->r = n->r ? node_insert(n->r, key, data) : node_create(key, data);
+    else if(cmp > 0)
+        n->l = n->l ? node_insert(n->l, key, data) : node_create(key, data);
+    update_height(n);
+    n = rebalance(n);
     return n;
 }
 
@@ -116,9 +103,9 @@ struct node *node_insert(struct node *n, char *key, void *data){
 void *node_lookup(struct node *n, char *key){
     if(!n) return 0;
     int cmp = strcmp(n->k, key);
-    if(cmp == 0) return n->d;
     if(cmp < 0) return node_lookup(n->r, key);
-    return node_lookup(n->l, key);
+    else if(cmp > 0) return node_lookup(n->l, key);
+    else return n->d;
 }
 
 // remove the rightmost node of a nonempty tree while maintaining balance;
