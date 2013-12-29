@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Ofast -fexpensive-optimizations -ffast-math -fno-exceptions -std=c99 -Wno-int-to-pointer-cast
+CFLAGS  = -Ofast -fexpensive-optimizations -ffast-math -fno-exceptions -std=c99 -Wall -Wno-int-to-pointer-cast
 
 all: bin/avl_pg bin/avl_demo
 	
