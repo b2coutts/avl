@@ -4,6 +4,9 @@
 
 #include <stdint.h>
 
+// type of key used
+typedef int val_t;
+
 typedef struct AVLTree {
     struct node *root;
 } AVLTree;
@@ -13,7 +16,7 @@ typedef struct node {
     struct node *l;
     struct node *r;
     char *k;
-    void *d; // data
+    val_t d; // data
 
     // height: length of longest path downwards. Height of an empty tree is -1.
     // Height of a singleton is 0.
@@ -22,8 +25,8 @@ typedef struct node {
 
 struct AVLTree* avl_create();
 
-void avl_insert(struct AVLTree *avl, char *key, void *data);
-void *avl_lookup(struct AVLTree *avl, char *key);
+void avl_insert(struct AVLTree *avl, char *key, val_t data);
+val_t avl_lookup(struct AVLTree *avl, char *key);
 void avl_delete(struct AVLTree *avl, char *key);
 void avl_destroy(struct AVLTree *avl);
 

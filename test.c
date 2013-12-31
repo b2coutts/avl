@@ -74,7 +74,7 @@ int main(){
     for(unsigned int i = 0; i < TEST_SIZE; i++){
         adv_key(s);
         keys[i] = strdup(s);
-        avl_insert(t, s, (void*)i);
+        avl_insert(t, s, i);
     }
     printf("done.\n");
 
@@ -90,7 +90,7 @@ int main(){
         }
         adv_key(s);
         keys[node] = strdup(s);
-        avl_insert(t, s, (void*)node);
+        avl_insert(t, s, node);
     }
     printf("done.\n");
 
@@ -110,7 +110,7 @@ int main(){
     printf("Testing value correctness..."); fflush(stdout);
     unsigned int correct = 0;
     for(int i = 0; i < ind; i++){
-        if(avl_lookup(t, keys[i]) == (void*)i) correct++;
+        if(avl_lookup(t, keys[i]) == i) correct++;
     }
     printf("Score: %i/%i\n", correct, ind);
 }

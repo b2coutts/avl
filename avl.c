@@ -11,7 +11,7 @@
 typedef struct munge {
     struct node *n;
     char *k;
-    void *d;
+    val_t d;
 } munge;
 
 // update the height of a node
@@ -28,7 +28,7 @@ void node_destroy(struct node *n, int recurse){
 }
 
 // create a node
-struct node *node_create(char *key, void *data){
+struct node *node_create(char *key, val_t data){
     struct node *n = malloc(sizeof(struct node));
     n->l = 0;
     n->r = 0;
@@ -88,7 +88,7 @@ struct node *rebalance(struct node *n){
 }
 
 // insert a kv pair into a node
-struct node *node_insert(struct node *n, char *key, void *data){
+struct node *node_insert(struct node *n, char *key, val_t data){
     int cmp = strcmp(n->k, key);
     if(cmp < 0)
         n->r = n->r ? node_insert(n->r, key, data) : node_create(key, data);
@@ -100,7 +100,7 @@ struct node *node_insert(struct node *n, char *key, void *data){
 }
 
 // lookup a value in a node
-void *node_lookup(struct node *n, char *key){
+val_t node_lookup(struct node *n, char *key){
     if(!n) return 0;
     int cmp = strcmp(n->k, key);
     if(cmp < 0) return node_lookup(n->r, key);
@@ -170,7 +170,7 @@ void avl_destroy(struct AVLTree *tree){
 }
     
 
-void avl_insert(struct AVLTree *avl, char *key, void* data){
+void avl_insert(struct AVLTree *avl, char *key, val_t data){
     if(avl->root){
         avl->root = node_insert(avl->root, key, data);
     }else{
@@ -182,6 +182,6 @@ void avl_delete(struct AVLTree *avl, char *key){
     avl->root = node_delete(avl->root, key);
 }
 
-void *avl_lookup(struct AVLTree *tree, char *key){
+val_t avl_lookup(struct AVLTree *tree, char *key){
     return node_lookup(tree->root, key);
 }
