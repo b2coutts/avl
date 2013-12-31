@@ -100,12 +100,12 @@ struct node *node_insert(struct node *n, char *key, val_t data){
 }
 
 // lookup a value in a node
-val_t node_lookup(struct node *n, char *key){
+val_t *node_lookup(struct node *n, char *key){
     if(!n) return 0;
     int cmp = strcmp(n->k, key);
     if(cmp < 0) return node_lookup(n->r, key);
     else if(cmp > 0) return node_lookup(n->l, key);
-    else return n->d;
+    else return &(n->d);
 }
 
 // remove the rightmost node of a nonempty tree while maintaining balance;
@@ -182,6 +182,6 @@ void avl_delete(struct AVLTree *avl, char *key){
     avl->root = node_delete(avl->root, key);
 }
 
-val_t avl_lookup(struct AVLTree *tree, char *key){
+val_t *avl_lookup(struct AVLTree *tree, char *key){
     return node_lookup(tree->root, key);
 }

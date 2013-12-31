@@ -1,4 +1,5 @@
 // testing harness for my AVL implementation
+// TODO: add verbose flag to report specifically on errors
 #include "avl.h"
 #include <string.h>
 #include <stdlib.h>
@@ -110,7 +111,8 @@ int main(){
     printf("Testing value correctness..."); fflush(stdout);
     unsigned int correct = 0;
     for(int i = 0; i < ind; i++){
-        if(avl_lookup(t, keys[i]) == i) correct++;
+        val_t *val = avl_lookup(t, keys[i]);
+        if(val && *val == i) correct++;
     }
     printf("Score: %i/%i\n", correct, ind);
 }
